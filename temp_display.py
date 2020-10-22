@@ -3,6 +3,7 @@
 import time
 import digitalio
 import board
+import serial
 from PIL import Image, ImageDraw, ImageFont
 import adafruit_rgb_display.st7789 as st7789
 
@@ -39,7 +40,7 @@ disp = st7789.ST7789(
 height = disp.width  # we swap height/width to rotate it to landscape!
 width = disp.height
 image = Image.new("RGB", (width, height))
-rotation = 90
+rotation = 270
 
 # Get drawing object to draw on image.
 draw = ImageDraw.Draw(image)
@@ -68,6 +69,8 @@ backlight.value = True
 
 ##### End Boilerplate code from Adafruit #####
 
+usb_serial = serial.Serial('/dev/ttyUSB0', 9600)
+
 # Change this to True to see Fahrenheit values
 is_fahrenheit = False
 
@@ -75,7 +78,6 @@ def convert_to_fahrenheit(val):
     return round((val * 9/5) + 32, 2)
 
 def temperature_to_string(val):
-
     return "{}° F".format(convert_to_fahrenheit(val)) if is_fahrenheit else "{}° C".format(val)
 
 
@@ -88,7 +90,8 @@ while True:
     0000 - This is a countdown used to track if the machine is in "fast heating" mode, it seems to go anywhere from 1500-0. 0 means it's no longer boosting.
     0 - This represents if the heating element is on, 0 is Off, 1is On.
     """
-    read_vals = "C1.23,124,126,095,1337,0"
+    # read_vals = "C1.23,124,126,095,1337,0"
+    read_vals = usb_serial.readline()
     try:
         individual_vals = read_vals.split(',')
         mode = individual_vals[0][0]
@@ -103,7 +106,7 @@ while True:
         line_3 = "Tgt Steam Temp: {}".format(temperature_to_string(target_steam_temp))
         line_4 = "Cur Steam Temp: {}".format(temperature_to_string(current_steam_temp))
         line_5 = "Cur HX Temp: {}".format(temperature_to_string(current_hx_temp))
-        line_6 = "Fast Heating Mode: {}".format(fast_heating_time_left) if fast_heating_time_left else ""
+        line_6 = "Fast Heating: {} sec".format(fast_heating_time_left) if fast_heating_time_left else ""
 
         error = False
     except IndexError:
