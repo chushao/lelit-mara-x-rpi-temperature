@@ -59,7 +59,7 @@ x = 0
 # Alternatively load a TTF font.  Make sure the .ttf font file is in the
 # same directory as the python script!
 # Some other nice fonts to try: http://www.dafont.com/bitmap.php
-font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
+font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
 
 # Turn on the backlight
 backlight = digitalio.DigitalInOut(board.D22)
@@ -99,15 +99,11 @@ while True:
         is_heating_element_on = int(individual_vals[5])
 
         line_1 = "{} Mode".format("Espresso" if mode == 'C' else "Steam")
-        line_2 = "Heating Element is {}, Target Steam Temp: {}".format(
-            "On" if is_heating_element_on else "Off",
-            temperature_to_string(target_steam_temp)
-        )
-        line_3 = "Current Steam Temp: {}, Current HX Temp: {}".format(
-            temperature_to_string(current_steam_temp),
-            temperature_to_string(current_hx_temp)
-        )
-        line_4 = "Fast Heating Mode - Time Left: {}".format(fast_heating_time_left) if fast_heating_time_left else ""
+        line_2 = "Heating Element is {}".format("On" if is_heating_element_on else "Off")
+        line_3 = "Tgt Steam Temp: {}".format(temperature_to_string(target_steam_temp))
+        line_4 = "Cur Steam Temp: {}".format(temperature_to_string(current_steam_temp))
+        line_5 = "Cur HX Temp: {}".format(temperature_to_string(current_hx_temp))
+        line_6 = "Fast Heating Mode: {}".format(fast_heating_time_left) if fast_heating_time_left else ""
 
         error = False
     except IndexError:
@@ -115,6 +111,8 @@ while True:
         line_2 = read_vals
         line_3 = ""
         line_4 = ""
+        line_5 = ""
+        line_6 = ""
         error = True
 
 
@@ -129,7 +127,10 @@ while True:
     draw.text((x, y), line_3, font=font, fill="#FFFFFF")
     y += font.getsize(line_3)[1]
     draw.text((x, y), line_4, font=font, fill="#FFFFFF")
-
+    y += font.getsize(line_4)[1]
+    draw.text((x, y), line_5, font=font, fill="#FFFFFF")
+    y += font.getsize(line_5)[1]
+    draw.text((x, y), line_6, font=font, fill="#FFFFFF")
     # Display image.
     disp.image(image, rotation)
     time.sleep(0.1)
