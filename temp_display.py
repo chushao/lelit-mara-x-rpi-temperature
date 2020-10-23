@@ -91,7 +91,7 @@ while True:
     0 - This represents if the heating element is on, 0 is Off, 1is On.
     """
     # read_vals = "C1.23,124,126,095,1337,0"
-    read_vals = usb_serial.readline()
+    read_vals = usb_serial.readline().decode('UTF-8').rstrip()
     try:
         individual_vals = read_vals.split(',')
         mode = individual_vals[0][0]
