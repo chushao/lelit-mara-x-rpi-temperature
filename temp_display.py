@@ -87,8 +87,8 @@ while True:
     124 - Current steam temperature in Celsius.
     126 - Target steam temperature in Celsius.
     096 - Current heat exchanger temperature in Celsius.
-    0000 - This is a countdown used to track if the machine is in "fast heating" mode, it seems to go anywhere from 1500-0. 0 means it's no longer boosting.
-    0 - This represents if the heating element is on, 0 is Off, 1is On.
+    0000 - If the machine is fast heating then this will count down until it goes to normal heating mode.
+    0 - Heating Element 0 = off, 1 = on.
     """
     # read_vals = "C1.23,124,126,095,1337,0"
     read_vals = usb_serial.readline().decode('UTF-8').rstrip()
@@ -107,16 +107,13 @@ while True:
         line_4 = "Cur Steam Temp: {}".format(temperature_to_string(current_steam_temp))
         line_5 = "Cur HX Temp: {}".format(temperature_to_string(current_hx_temp))
         line_6 = "Fast Heating: {} sec".format(fast_heating_time_left) if fast_heating_time_left else ""
-
-        error = False
     except IndexError:
-        line_1 = "Error - Bad Data"
-        line_2 = read_vals
+        line_1 = ""
+        line_2 = ""
         line_3 = ""
         line_4 = ""
         line_5 = ""
         line_6 = ""
-        error = True
 
 
     # Draw a black filled box to clear the image.
