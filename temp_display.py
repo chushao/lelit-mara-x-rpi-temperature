@@ -69,7 +69,7 @@ backlight.value = True
 
 ##### End Boilerplate code from Adafruit #####
 
-usb_serial = serial.Serial('/dev/ttyUSB0', 9600)
+usb_serial = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
 
 # Change this to True to see Fahrenheit values
 is_fahrenheit = False
@@ -136,4 +136,4 @@ while True:
     draw.text((x, y), line_6, font=font, fill="#FFFFFF")
     # Display image.
     disp.image(image, rotation)
-    time.sleep(0.1)
+    time.sleep(0.5)
