@@ -3,5 +3,7 @@ Description=Lelit MaraX Temperature Display Service
 
 [Service]
 ExecStart=/usr/bin/python3 /usr/local/lib/marax-temp-display/temp_display.py
-WantedBy=default.target
 Restart=on-failure
+
+[Install]
+WantedBy=default.target
