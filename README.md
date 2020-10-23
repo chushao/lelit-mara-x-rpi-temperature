@@ -44,4 +44,7 @@ If everything looks great, then run the install script (./install.sh) and it sho
 
 Reboot and enjoy.
 
+Need to make changes?
+make sure you change the file in `/usr/local/lib/marax-temp-display/temp_display.py` and not the local one.
+
 

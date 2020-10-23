@@ -133,4 +133,4 @@ while True:
     draw.text((x, y), line_6, font=font, fill="#FFFFFF")
     # Display image.
     disp.image(image, rotation)
-    time.sleep(0.5)
+    time.sleep(0.1)
