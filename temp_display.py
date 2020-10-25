@@ -40,7 +40,7 @@ disp = st7789.ST7789(
 height = disp.width  # we swap height/width to rotate it to landscape!
 width = disp.height
 image = Image.new("RGB", (width, height))
-rotation = 270
+rotation = 90
 
 # Get drawing object to draw on image.
 draw = ImageDraw.Draw(image)
@@ -69,6 +69,19 @@ backlight.value = True
 
 ##### End Boilerplate code from Adafruit #####
 
+# Button usage
+button_top = digitalio.DigitalInOut(board.D23)
+button_bottom = digitalio.DigitalInOut(board.D24)
+button_top.switch_to_input()
+button_bottom.switch_to_input()
+
+is_timer_mode = False
+timer_started = False
+time_elapsed = 0
+start_time = time.time()
+stop_time = time.time()
+
+
 usb_serial = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
 
 # Change this to True to see Fahrenheit values
@@ -81,7 +94,7 @@ def temperature_to_string(val):
     return "{}° F".format(convert_to_fahrenheit(val)) if is_fahrenheit else "{}° C".format(val)
 
 
-while True:
+def draw_stats():
     """
     C1.23 - (C)offee or (V)apor, 1.23 Version
     124 - Current steam temperature in Celsius.
@@ -115,10 +128,6 @@ while True:
         line_5 = ""
         line_6 = ""
 
-
-    # Draw a black filled box to clear the image.
-    draw.rectangle((0, 0, width, height), outline=0, fill=0)
-
     y = top
     draw.text((x, y), line_1, font=font, fill="#FFFFFF")
     y += font.getsize(line_1)[1]
@@ -134,3 +143,40 @@ while True:
     # Display image.
     disp.image(image, rotation)
     time.sleep(0.1)
+
+def draw_timer():
+    if timer_started:
+        stop_time = time.time()
+        time_elapsed = stop_time - start_time
+    y = top
+    draw.text((x, y), str(round(time_elapsed, 2)), font=font, fill="#FFFFFF")
+
+
+
+while True:
+    # Draw a black filled box to clear the image.
+    draw.rectangle((0, 0, width, height), outline=0, fill=0)
+
+    if not button_bottom.value and button_top.value: # reverse logic, bottom button pressed
+        if is_timer_mode:
+            time_elapsed = 0
+            is_timer_mode = False
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+        else:
+            is_timer_mode = True
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 36)
+
+    elif button_bottom.value and not button_top.value and is_timer_mode:
+        if timer_started:
+            timer_started = False
+        else:
+            start_time = time.time()
+            timer_started = True
+
+
+    if is_timer_mode:
+        draw_timer()
+    else:
+        draw_stats()
+
+
