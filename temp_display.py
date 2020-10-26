@@ -140,9 +140,6 @@ def draw_stats():
     draw.text((x, y), line_5, font=font, fill="#FFFFFF")
     y += font.getsize(line_5)[1]
     draw.text((x, y), line_6, font=font, fill="#FFFFFF")
-    # Display image.
-    disp.image(image, rotation)
-    time.sleep(0.1)
 
 def draw_timer():
     if timer_started:
@@ -178,5 +175,9 @@ while True:
         draw_timer()
     else:
         draw_stats()
+
+    # Display image.
+    disp.image(image, rotation)
+    time.sleep(0.1)
 
 
