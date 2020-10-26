@@ -3,10 +3,11 @@ Temperature Display from Lelit Mara X using Raspberry Pi
 
 ![Image Of Raspberry Pi in 3D Printed case](./RPiMara.jpeg)
 
-Inspired by this youtube video to have a display: https://www.youtube.com/watch?v=9NL6yeq7sMM
+Inspired by this youtube video to have a display (and used comments as starting point): https://www.youtube.com/watch?v=9NL6yeq7sMM
 
-With some help from this reddit post:
+With some verification from this reddit post:
 https://old.reddit.com/r/Coffee/comments/hfsvep/data_visualisation_lelit_marax_mod/
+
 
 ## Hardware:
 
@@ -48,3 +49,10 @@ Need to make changes?
 make sure you change the file in `/usr/local/lib/marax-temp-display/temp_display.py` and not the local one.
 
 
+Timer mode:
+Since the PiTFT has two buttons, pressing the bottom button will set up timer mode.
+In timer mode you can press the top button to start and the same button to stop.
+
+If a timer has started and the bottom button gets pressed then it shows the temp screen again. Timer will keep running.
+
+If a timer has started then stopped. Pressing the top button will start a new timer.
