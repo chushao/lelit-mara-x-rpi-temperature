@@ -142,6 +142,9 @@ def draw_stats():
     draw.text((x, y), line_6, font=font, fill="#FFFFFF")
 
 def draw_timer():
+    # lol global variables
+    global time_elapsed
+    global stop_time
     if timer_started:
         stop_time = time.time()
         time_elapsed = stop_time - start_time
@@ -161,7 +164,7 @@ while True:
             font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
         else:
             is_timer_mode = True
-            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 36)
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 80)
 
     elif button_bottom.value and not button_top.value and is_timer_mode:
         if timer_started:
