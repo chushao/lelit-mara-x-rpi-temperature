@@ -17,7 +17,8 @@ https://old.reddit.com/r/Coffee/comments/hfsvep/data_visualisation_lelit_marax_m
 * PL2303 USB to TTL Serial cable
 (https://smile.amazon.com/gp/product/B00QT7LQ88/)
 * MicroSD Card
-* OTG MicroUSB Adapter (https://www.adafruit.com/product/2910)
+* OTG MicroUSB Adapter
+* 3D Printed Stand (https://www.thingiverse.com/thing:4394713)
 
 
 ### Hardware Install:
