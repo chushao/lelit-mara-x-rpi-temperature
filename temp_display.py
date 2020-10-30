@@ -168,13 +168,12 @@ while True:
     # Draw a black filled box to clear the image.
     draw.rectangle((0, 0, width, height), outline=0, fill=0)
     update_sensor(reed_sensor.value)
-    if sum(last_reed_vals) > 0:
+    if sum(last_reed_vals) == 0:
         if not is_lever_mode:
             is_timer_mode = True
             is_lever_mode = True
             start_time = time.time()
             timer_started = True
-            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 120)
 
     else:
         if is_lever_mode:
@@ -182,16 +181,13 @@ while True:
             is_timer_mode = False
             timer_started = False
             time_elapsed = 0
-            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
 
         if not button_bottom.value and button_top.value: # reverse logic, bottom button pressed
             if is_timer_mode:
                 time_elapsed = 0
                 is_timer_mode = False
-                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
             else:
                 is_timer_mode = True
-                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 120)
 
         elif button_bottom.value and not button_top.value and is_timer_mode:
             if timer_started:
@@ -202,8 +198,10 @@ while True:
 
 
     if is_timer_mode:
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 120)
         draw_timer()
     else:
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
         draw_stats()
 
     # Display image.
