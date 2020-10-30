@@ -160,7 +160,7 @@ def draw_timer():
         stop_time = time.time()
         time_elapsed = stop_time - start_time
     y = top
-    draw.text((x, y), str(round(time_elapsed, 0)), font=font, fill="#FFFFFF")
+    draw.text((x, y), str(int(round(time_elapsed, 0))), font=font, fill="#FFFFFF")
 
 
 
@@ -169,11 +169,12 @@ while True:
     draw.rectangle((0, 0, width, height), outline=0, fill=0)
     update_sensor(reed_sensor.value)
     if sum(last_reed_vals) > 0:
-        is_timer_mode = True
-        is_lever_mode = True
-        start_time = time.time()
-        timer_started = True
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 120)
+        if not is_lever_mode:
+            is_timer_mode = True
+            is_lever_mode = True
+            start_time = time.time()
+            timer_started = True
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 120)
 
     else:
         if is_lever_mode:
