@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import RPi.GPIO as GPIO
 import time
 import digitalio
 import board
@@ -85,15 +86,17 @@ stop_time = time.time()
 usb_serial = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
 
 # Reed Sensor is pulsing. so only if all values are the same means it's closed
-reed_sensor = digitalio.DigitalInOut(board.D16)
-reed_sensor.switch_to_input()
-last_reed_vals = [0 for _ in range(15)]
+# reed_sensor = digitalio.DigitalInOut(board.D16)
+# reed_sensor.switch_to_input()
+GPIO.setmode(GPIO.BCM) 
+GPIO.setup(16, GPIO.IN, pull_up_down = GPIO.PUD_UP) 
+last_reed_vals = [1 for _ in range(30)]
 is_lever_mode = False
 
 def update_sensor(val):
     global last_reed_vals
     last_reed_vals.append(int(val))
-    last_reed_vals = last_reed_vals[1:16]
+    last_reed_vals = last_reed_vals[1:31]
 
 # Change this to True to see Fahrenheit values
 is_fahrenheit = False
@@ -167,8 +170,8 @@ def draw_timer():
 while True:
     # Draw a black filled box to clear the image.
     draw.rectangle((0, 0, width, height), outline=0, fill=0)
-    update_sensor(reed_sensor.value)
-    if sum(last_reed_vals) <  6:
+    update_sensor(GPIO.input(16))
+    if sum(last_reed_vals) != 30:
         if not is_lever_mode:
             is_timer_mode = True
             is_lever_mode = True
@@ -206,6 +209,6 @@ while True:
 
     # Display image.
     disp.image(image, rotation)
-    time.sleep(0.05)
+    time.sleep(0.1)
 
 
