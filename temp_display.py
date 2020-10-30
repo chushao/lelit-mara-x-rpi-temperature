@@ -92,8 +92,8 @@ is_lever_mode = False
 
 def update_sensor(val):
     global last_reed_vals
-    last_reed_vals.append(val)
-    last_reed_vals = last_reed_vals[:15]
+    last_reed_vals.append(int(val))
+    last_reed_vals = last_reed_vals[1:16]
 
 # Change this to True to see Fahrenheit values
 is_fahrenheit = False
@@ -160,7 +160,7 @@ def draw_timer():
         stop_time = time.time()
         time_elapsed = stop_time - start_time
     y = top
-    draw.text((x, y), str(round(time_elapsed, 2)), font=font, fill="#FFFFFF")
+    draw.text((x, y), str(round(time_elapsed, 0)), font=font, fill="#FFFFFF")
 
 
 
@@ -181,6 +181,7 @@ while True:
             is_timer_mode = False
             timer_started = False
             time_elapsed = 0
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
 
         if not button_bottom.value and button_top.value: # reverse logic, bottom button pressed
             if is_timer_mode:
