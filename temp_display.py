@@ -84,6 +84,17 @@ stop_time = time.time()
 
 usb_serial = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
 
+# Reed Sensor is pulsing. so only if all values are the same means it's closed
+reed_sensor = digitalio.DigitalInOut(board.D16)
+reed_sensor.switch_to_input()
+last_reed_vals = [0 for _ in range(15)]
+is_lever_mode = False
+
+def update_sensor(val):
+    global last_reed_vals
+    last_reed_vals.append(val)
+    last_reed_vals = last_reed_vals[:15]
+
 # Change this to True to see Fahrenheit values
 is_fahrenheit = False
 
@@ -156,22 +167,36 @@ def draw_timer():
 while True:
     # Draw a black filled box to clear the image.
     draw.rectangle((0, 0, width, height), outline=0, fill=0)
+    update_sensor(reed_sensor.value)
+    if sum(last_reed_vals) > 0:
+        is_timer_mode = True
+        is_lever_mode = True
+        start_time = time.time()
+        timer_started = True
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 120)
 
-    if not button_bottom.value and button_top.value: # reverse logic, bottom button pressed
-        if is_timer_mode:
-            time_elapsed = 0
+    else:
+        if is_lever_mode:
+            is_lever_mode = False
             is_timer_mode = False
-            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
-        else:
-            is_timer_mode = True
-            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 80)
-
-    elif button_bottom.value and not button_top.value and is_timer_mode:
-        if timer_started:
             timer_started = False
-        else:
-            start_time = time.time()
-            timer_started = True
+            time_elapsed = 0
+
+        if not button_bottom.value and button_top.value: # reverse logic, bottom button pressed
+            if is_timer_mode:
+                time_elapsed = 0
+                is_timer_mode = False
+                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
+            else:
+                is_timer_mode = True
+                font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 120)
+
+        elif button_bottom.value and not button_top.value and is_timer_mode:
+            if timer_started:
+                timer_started = False
+            else:
+                start_time = time.time()
+                timer_started = True
 
 
     if is_timer_mode:
