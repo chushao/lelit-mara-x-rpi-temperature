@@ -168,7 +168,7 @@ while True:
     # Draw a black filled box to clear the image.
     draw.rectangle((0, 0, width, height), outline=0, fill=0)
     update_sensor(reed_sensor.value)
-    if sum(last_reed_vals) == 0:
+    if sum(last_reed_vals) <  6:
         if not is_lever_mode:
             is_timer_mode = True
             is_lever_mode = True
@@ -206,6 +206,6 @@ while True:
 
     # Display image.
     disp.image(image, rotation)
-    time.sleep(0.1)
+    time.sleep(0.05)
 
 
